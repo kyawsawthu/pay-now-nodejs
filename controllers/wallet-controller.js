@@ -69,7 +69,8 @@ async function approve(req, res) {
       transaction.receiverId,
       transaction.amount
     );
-    const result = await transactionService.approve(transactionId);
+    const status = TransactionStatus.DONE;
+    const result = await transactionService.updateStatus(transactionId, status);
     res.success(result.response());
   } catch (err) {
     console.log(err);
@@ -90,7 +91,8 @@ async function cancel(req, res) {
     ) {
       throw WalletError.transactionFailed;
     }
-    const result = await transactionService.cancel(transactionId);
+    const status = TransactionStatus.CANCELED;
+    const result = await transactionService.updateStatus(transactionId, status);
     res.success(result.response());
   } catch (err) {
     res.fail(err);
@@ -110,7 +112,8 @@ async function decline(req, res) {
     ) {
       throw WalletError.transactionFailed;
     }
-    const result = await transactionService.decline(transactionId);
+    const status = TransactionStatus.DECLINED;
+    const result = await transactionService.updateStatus(transactionId, status);
     res.success(result.response());
   } catch (err) {
     res.fail(err);

@@ -27,26 +27,7 @@ async function request(senderId, receiverId, amount, note) {
   });
 }
 
-async function approve(id) {
-  const status = TransactionStatus.DONE;
-  return await Transaction.findOneAndUpdate(
-    { _id: id },
-    { status: status },
-    { new: true }
-  );
-}
-
-async function cancel(id) {
-  const status = TransactionStatus.CANCELED;
-  return await Transaction.findOneAndUpdate(
-    { _id: id },
-    { status: status },
-    { new: true }
-  );
-}
-
-async function decline(id) {
-  const status = TransactionStatus.DECLINED;
+async function updateStatus(id, status) {
   return await Transaction.findOneAndUpdate(
     { _id: id },
     { status: status },
@@ -58,7 +39,5 @@ module.exports = {
   getTransactionById,
   transfer,
   request,
-  approve,
-  cancel,
-  decline,
+  updateStatus,
 };
