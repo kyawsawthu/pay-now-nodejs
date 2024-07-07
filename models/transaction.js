@@ -23,22 +23,23 @@ const transactionSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    default: new Date(),
+    default: Date.now,
   },
 });
 
 transactionSchema.pre("save", async function (next) {
   this.amount = parseFloat(this.amount).toFixed(2);
-  this.date = new Date();
+  this.date = Date.now;
   next();
 });
 
 transactionSchema.methods.response = function () {
   return {
-    transactionId: this._id,
+    id: this._id,
     amount: this.amount,
     status: this.status,
-    note: this.note,
+    note: this.note || null,
+    date: this.date,
   };
 };
 

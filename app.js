@@ -19,8 +19,10 @@ app.use(responseHandler);
 // routers
 const authRouter = require("./routes/auth-route");
 const walletRouter = require("./routes/wallet-route");
+const transactionRouter = require("./routes/transaction-route");
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/wallet", walletRouter);
+app.use("/api/v1/transaction", transactionRouter);
 app.use("*", notFound);
 
 // database connection
