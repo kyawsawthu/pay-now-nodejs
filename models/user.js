@@ -35,7 +35,7 @@ userSchema.methods.comparePassword = async function (candidatePassword) {
 
 userSchema.methods.response = function () {
   return {
-    userId: this._id,
+    id: this._id,
     name: this.name,
     email: this.email,
   };
