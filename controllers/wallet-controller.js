@@ -59,14 +59,14 @@ async function approve(req, res) {
       throw WalletError.transactionFailed;
     }
     if (
-      transaction.senderId != req.userId ||
-      transaction.receiverId == req.userId
+      transaction.sender != req.userId ||
+      transaction.receiver == req.userId
     ) {
       throw WalletError.transactionFailed;
     }
     await walletService.transfer(
-      transaction.senderId,
-      transaction.receiverId,
+      transaction.sender,
+      transaction.receiver,
       transaction.amount
     );
     const status = TransactionStatus.DONE;
@@ -86,7 +86,7 @@ async function cancel(req, res) {
     );
     if (
       !transaction ||
-      transaction.receiverId != req.userId ||
+      transaction.receiver != req.userId ||
       transaction.status !== TransactionStatus.PENDING
     ) {
       throw WalletError.transactionFailed;
@@ -107,7 +107,7 @@ async function decline(req, res) {
     );
     if (
       !transaction ||
-      transaction.senderId != req.userId ||
+      transaction.sender != req.userId ||
       transaction.status !== TransactionStatus.PENDING
     ) {
       throw WalletError.transactionFailed;

@@ -1,3 +1,4 @@
+const { WalletError } = require("../errors");
 const Wallet = require("../models/wallet");
 
 async function createWallet(userId) {
@@ -5,13 +6,13 @@ async function createWallet(userId) {
 }
 
 async function getWalletBalance(userId) {
-  const wallet = await Wallet.findOne({ _id: userId });
+  const wallet = await Wallet.findById(userId);
   return wallet.balance;
 }
 
-async function transfer(senderId, receiverId, amount) {
-  const senderWallet = await Wallet.findOne({ _id: senderId });
-  const receiverWallet = await Wallet.findOne({ _id: receiverId });
+async function transfer(sender, receiver, amount) {
+  const senderWallet = await Wallet.findById(sender);
+  const receiverWallet = await Wallet.findById(receiver);
   if (parseFloat(senderWallet.balance) < amount) {
     throw WalletError.insufficientAmount;
   }
