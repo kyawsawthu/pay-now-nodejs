@@ -1,4 +1,4 @@
-const { AppError, AuthError } = require("../errors");
+const { AppError } = require("../errors");
 const validator = require("validator");
 
 function validateRegister(req) {
@@ -7,7 +7,7 @@ function validateRegister(req) {
     throw AppError.badRequest("Username cannot be empty.");
   }
   if (!email || validator.isEmail(email) == false) {
-    throw AuthError.invalidEmail;
+    throw AppError.badRequest("Invalid email address.");
   }
   if (!password) {
     throw AppError.badRequest("Password cannot be empty.");
@@ -20,13 +20,13 @@ function validateRegister(req) {
 function validateLogin(req) {
   const { email } = req.body;
   if (!email || validator.isEmail(email) == false) {
-    throw AuthError.invalidEmail;
+    throw AppError.badRequest("Invalid email address.");
   }
 }
 
 function validateEmail(email) {
   if (!email || validator.isEmail(email) == false) {
-    throw AuthError.invalidEmail;
+    throw AppError.badRequest("Invalid email address.");
   }
 }
 
