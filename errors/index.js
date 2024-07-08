@@ -3,6 +3,7 @@ const errorChecker = require("./error-checker");
 const AppError = require("./app-error");
 const AuthError = require("./auth-error");
 const WalletError = require("./wallet-error");
+const PaymentError = require("./payment-error");
 
 module.exports = {
   errorCodes,
@@ -10,4 +11,5 @@ module.exports = {
   AppError,
   AuthError,
   WalletError,
+  PaymentError,
 };

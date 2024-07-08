@@ -27,12 +27,23 @@ async function verifyUser(email) {
   );
 }
 
-function updateMobileNumber(req) {}
+async function addPaymentCard(userId, cardId) {
+  return await User.findByIdAndUpdate(userId, {
+    $push: { paymentCards: cardId },
+  });
+}
+
+async function deletePaymentCard(userId, cardId) {
+  return await User.findByIdAndUpdate(userId, {
+    $pull: { paymentCards: cardId },
+  });
+}
 
 module.exports = {
   getUserById,
   getUserByEmail,
   createUser,
   verifyUser,
-  updateMobileNumber,
+  addPaymentCard,
+  deletePaymentCard,
 };
