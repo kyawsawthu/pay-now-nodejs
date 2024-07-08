@@ -1,6 +1,8 @@
 const mongoose = require("mongoose");
 const encrypt = require("../utils/encrypt");
 
+const ObjectId = mongoose.Schema.ObjectId;
+
 const userSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -21,6 +23,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     minLength: 8,
   },
+  paymentCards: [{ type: ObjectId, ref: "payment-card" }],
 });
 
 userSchema.pre("save", async function (next) {
