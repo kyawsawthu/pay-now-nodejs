@@ -6,8 +6,20 @@ const { WalletError, AppError } = require("../errors");
 
 async function balance(req, res) {
   try {
-    const balance = await walletService.getWalletBalance(req.userId);
-    res.success({ balance: balance });
+    const wallet = await walletService.getWalletById(req.userId);
+    const response = wallet.response();
+    res.success(response);
+  } catch (err) {
+    res.fail(err);
+  }
+}
+
+async function topup(req, res) {
+  try {
+    const { paymentId, amount } = req.body;
+    const wallet = await walletService.topup(req.userId, amount);
+    const response = wallet.response();
+    res.success(response);
   } catch (err) {
     res.fail(err);
   }
@@ -59,17 +71,18 @@ async function approve(req, res) {
       throw WalletError.transactionFailed;
     }
     if (
-      transaction.senderId != req.userId ||
-      transaction.receiverId == req.userId
+      transaction.sender != req.userId ||
+      transaction.receiver == req.userId
     ) {
       throw WalletError.transactionFailed;
     }
     await walletService.transfer(
-      transaction.senderId,
-      transaction.receiverId,
+      transaction.sender,
+      transaction.receiver,
       transaction.amount
     );
-    const result = await transactionService.approve(transactionId);
+    const status = TransactionStatus.DONE;
+    const result = await transactionService.updateStatus(transactionId, status);
     res.success(result.response());
   } catch (err) {
     console.log(err);
@@ -85,12 +98,13 @@ async function cancel(req, res) {
     );
     if (
       !transaction ||
-      transaction.receiverId != req.userId ||
+      transaction.receiver != req.userId ||
       transaction.status !== TransactionStatus.PENDING
     ) {
       throw WalletError.transactionFailed;
     }
-    const result = await transactionService.cancel(transactionId);
+    const status = TransactionStatus.CANCELED;
+    const result = await transactionService.updateStatus(transactionId, status);
     res.success(result.response());
   } catch (err) {
     res.fail(err);
@@ -105,12 +119,13 @@ async function decline(req, res) {
     );
     if (
       !transaction ||
-      transaction.senderId != req.userId ||
+      transaction.sender != req.userId ||
       transaction.status !== TransactionStatus.PENDING
     ) {
       throw WalletError.transactionFailed;
     }
-    const result = await transactionService.decline(transactionId);
+    const status = TransactionStatus.DECLINED;
+    const result = await transactionService.updateStatus(transactionId, status);
     res.success(result.response());
   } catch (err) {
     res.fail(err);
@@ -119,6 +134,7 @@ async function decline(req, res) {
 
 module.exports = {
   balance,
+  topup,
   transfer,
   request,
   approve,

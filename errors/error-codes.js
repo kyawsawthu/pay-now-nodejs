@@ -9,3 +9,5 @@ module.exports.invalidUser = "WE001";
 module.exports.invalidAmount = "WE002";
 module.exports.insufficientAmount = "WE003";
 module.exports.transactionFailed = "WE004";
+
+module.exports.paymentCardAlreadyExists = "PE004";

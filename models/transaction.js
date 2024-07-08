@@ -3,13 +3,15 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Schema.ObjectId;
 
 const transactionSchema = new mongoose.Schema({
-  senderId: {
+  sender: {
     type: ObjectId,
     required: true,
+    ref: "user",
   },
-  receiverId: {
+  receiver: {
     type: ObjectId,
     required: true,
+    ref: "user",
   },
   amount: {
     type: String,
@@ -23,22 +25,23 @@ const transactionSchema = new mongoose.Schema({
   date: {
     type: Date,
     required: true,
-    default: new Date(),
+    default: Date.now,
   },
 });
 
 transactionSchema.pre("save", async function (next) {
   this.amount = parseFloat(this.amount).toFixed(2);
-  this.date = new Date();
+  this.date = Date.now;
   next();
 });
 
 transactionSchema.methods.response = function () {
   return {
-    transactionId: this._id,
+    id: this._id,
     amount: this.amount,
     status: this.status,
-    note: this.note,
+    note: this.note || null,
+    date: this.date,
   };
 };
 
