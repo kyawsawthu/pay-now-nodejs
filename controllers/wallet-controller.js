@@ -1,5 +1,7 @@
 const { TransactionStatus } = require("../constants");
+const userService = require("../services/user-service");
 const walletService = require("../services/wallet-service");
+const paymentService = require("../services/payment-service");
 const transactionService = require("../services/transaction-service");
 const transactionValidation = require("../validations/transaction-validation");
 const { WalletError, AppError } = require("../errors");
@@ -17,6 +19,11 @@ async function balance(req, res) {
 async function topup(req, res) {
   try {
     const { paymentId, amount } = req.body;
+    transactionValidation.validateAmount(amount);
+    const paymentCard = await paymentService.getCardById(paymentId);
+    if (!paymentCard) {
+      throw AppError.badRequest("Invalid payment card.");
+    }
     const wallet = await walletService.topup(req.userId, amount);
     const response = wallet.response();
     res.success(response);
@@ -27,8 +34,12 @@ async function topup(req, res) {
 
 async function transfer(req, res) {
   try {
-    transactionValidation.validate(req);
     const { userId, amount, note } = req.body;
+    const user = await userService.getUserById(userId);
+    if (!user) {
+      throw AppError.badRequest("Invalid receipent.");
+    }
+    transactionValidation.validateAmount(amount);
     const currentUserId = req.userId;
     if (currentUserId === userId) {
       throw WalletError.transactionFailed;
