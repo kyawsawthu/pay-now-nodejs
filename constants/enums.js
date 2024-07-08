@@ -15,8 +15,13 @@ const TransactionStatus = Object.freeze({
   DONE: "done",
 });
 
+const NotificationTitle = Object.freeze({
+  PAYMENT_SUCCESS: "Payment Success",
+});
+
 module.exports = {
   OTPPurpose,
   TransactionType,
   TransactionStatus,
+  NotificationTitle,
 };
