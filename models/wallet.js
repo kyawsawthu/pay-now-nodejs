@@ -18,4 +18,11 @@ walletSchema.pre("save", function (next) {
   next();
 });
 
+walletSchema.methods.response = function () {
+  return {
+    balance: this.balance,
+    updatedAt: this.updatedAt,
+  };
+};
+
 module.exports = mongoose.model("wallet", walletSchema);
