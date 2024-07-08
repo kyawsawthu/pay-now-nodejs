@@ -3,13 +3,15 @@ const mongoose = require("mongoose");
 const ObjectId = mongoose.Schema.ObjectId;
 
 const transactionSchema = new mongoose.Schema({
-  senderId: {
+  sender: {
     type: ObjectId,
     required: true,
+    ref: "user",
   },
-  receiverId: {
+  receiver: {
     type: ObjectId,
     required: true,
+    ref: "user",
   },
   amount: {
     type: String,

@@ -2,15 +2,17 @@ const Transaction = require("../models/transaction");
 const { TransactionStatus } = require("../constants");
 
 async function getTransactionById(id) {
-  return await Transaction.findOne({ _id: id });
+  return await Transaction.findById(id);
 }
 
 // transactions with status: done
 async function getTransactions(userId, limit) {
   return await Transaction.find({
-    $or: [{ senderId: userId }, { receiverId: userId }],
+    $or: [{ sender: userId }, { receiver: userId }],
     status: TransactionStatus.DONE,
   })
+    .populate("sender")
+    .populate("receiver")
     .sort({ date: -1 })
     .limit(limit);
 }
@@ -18,7 +20,7 @@ async function getTransactions(userId, limit) {
 // transactions with status != done as a sender
 async function getRequestsAsSender(userId) {
   return await Transaction.find({
-    senderId: userId,
+    sender: userId,
     status: { $ne: TransactionStatus.DONE },
   }).sort({ date: -1 });
 }
@@ -26,27 +28,27 @@ async function getRequestsAsSender(userId) {
 // transactions with status != done as a receiver
 async function getRequestsAsReceiver(userId) {
   return await Transaction.find({
-    receiverId: userId,
+    receiver: userId,
     status: { $ne: TransactionStatus.DONE },
   }).sort({ date: -1 });
 }
 
-async function transfer(senderId, receiverId, amount, note) {
+async function transfer(sender, receiver, amount, note) {
   const status = TransactionStatus.DONE;
   return await Transaction.create({
-    senderId,
-    receiverId,
+    sender,
+    receiver,
     amount,
     note,
     status,
   });
 }
 
-async function request(senderId, receiverId, amount, note) {
+async function request(sender, receiver, amount, note) {
   const status = TransactionStatus.PENDING;
   return await Transaction.create({
-    senderId,
-    receiverId,
+    sender,
+    receiver,
     amount,
     note,
     status,
