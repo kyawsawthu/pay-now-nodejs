@@ -6,8 +6,20 @@ const { WalletError, AppError } = require("../errors");
 
 async function balance(req, res) {
   try {
-    const balance = await walletService.getWalletBalance(req.userId);
-    res.success({ balance: balance });
+    const wallet = await walletService.getWalletById(req.userId);
+    const response = wallet.response();
+    res.success(response);
+  } catch (err) {
+    res.fail(err);
+  }
+}
+
+async function topup(req, res) {
+  try {
+    const { paymentId, amount } = req.body;
+    const wallet = await walletService.topup(req.userId, amount);
+    const response = wallet.response();
+    res.success(response);
   } catch (err) {
     res.fail(err);
   }
@@ -122,6 +134,7 @@ async function decline(req, res) {
 
 module.exports = {
   balance,
+  topup,
   transfer,
   request,
   approve,

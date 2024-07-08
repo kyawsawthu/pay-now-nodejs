@@ -5,9 +5,15 @@ async function createWallet(userId) {
   return await Wallet.create({ _id: userId });
 }
 
-async function getWalletBalance(userId) {
+async function getWalletById(userId) {
+  return await Wallet.findById(userId);
+}
+
+async function topup(userId, amount) {
   const wallet = await Wallet.findById(userId);
-  return wallet.balance;
+  wallet.balance = (parseFloat(wallet.balance) + parseFloat(amount)).toFixed(2);
+  await wallet.save();
+  return wallet;
 }
 
 async function transfer(sender, receiver, amount) {
@@ -28,6 +34,7 @@ async function transfer(sender, receiver, amount) {
 
 module.exports = {
   createWallet,
-  getWalletBalance,
+  getWalletById,
+  topup,
   transfer,
 };
