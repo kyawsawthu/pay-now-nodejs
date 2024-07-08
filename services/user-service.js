@@ -1,10 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("../models/user");
 
-function createUserId() {
-  return new mongoose.Types.ObjectId();
-}
-
 async function createUser(req) {
   const { name, email, password } = req.body;
   const user = await User.create({ name, email, password });
@@ -16,7 +12,7 @@ async function getUserByEmail(email) {
 }
 
 async function getUserById(userId) {
-  return await User.findOne({ _id: userId });
+  return await User.findById(userId);
 }
 
 async function verifyUser(email) {
