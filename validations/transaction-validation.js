@@ -1,4 +1,3 @@
-require("../utils/number");
 const { AppError } = require("../errors");
 
 function validateAmount(amount) {
