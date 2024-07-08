@@ -1,19 +1,14 @@
 require("../utils/number");
-const { WalletError, AppError } = require("../errors");
+const { AppError } = require("../errors");
 
-function validate(req) {
-  const { userId, amount } = req.body;
-  if (!userId) {
-    throw WalletError.invalidUser;
-  }
-  if (!amount || typeof amount !== "string" || parseFloat(amount) <= 0) {
-    throw WalletError.invalidAmount;
-  }
-  if (Number(amount).countDecimals() > 2) {
-    throw AppError.message("Amount must have 2 decimal points.");
+function validateAmount(amount) {
+  const amountRegex = /^(?!0\d)\d*(\.\d{1,2})?$/;
+
+  if (!amountRegex.test(amount) || parseFloat(amount) <= 0) {
+    throw AppError.badRequest("Invalid amount.");
   }
 }
 
 module.exports = {
-  validate,
+  validateAmount,
 };

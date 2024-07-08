@@ -1,12 +1,6 @@
 const AppError = require("./app-error");
 const ErrorCode = require("./error-codes");
 
-const invalidEmail = new AppError(
-  200,
-  ErrorCode.invalidEmail,
-  "Invalid email address."
-);
-
 const emailAlreadyExists = new AppError(
   200,
   ErrorCode.emailAlreadyExists,
@@ -46,7 +40,6 @@ const logoutFail = new AppError(
 );
 
 module.exports = {
-  invalidEmail,
   emailAlreadyExists,
   emailDoesNotExist,
   incorrectPassword,

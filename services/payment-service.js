@@ -1,6 +1,10 @@
 const User = require("../models/user");
 const PaymentCard = require("../models/payment-card");
 
+async function getCardById(cardId) {
+  return await PaymentCard.findById(cardId);
+}
+
 async function getCardByNumber(cardNumber) {
   return await PaymentCard.findOne({ cardNumber });
 }
@@ -42,6 +46,7 @@ async function deleteCard(cardId) {
 }
 
 module.exports = {
+  getCardById,
   getCardByNumber,
   getAllCards,
   createCard,
