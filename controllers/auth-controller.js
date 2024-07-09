@@ -102,15 +102,6 @@ async function verifyOTP(req, res) {
   }
 }
 
-async function profile(req, res) {
-  try {
-    const user = await userService.getUserById(req.userId);
-    res.success(user.response());
-  } catch (err) {
-    res.fail(err);
-  }
-}
-
 async function logout(req, res) {
   try {
     const token = tokenService.getBearerToken(req);
@@ -137,6 +128,5 @@ module.exports = {
   login,
   requestOTP,
   verifyOTP,
-  profile,
   logout,
 };
