@@ -1,37 +1,39 @@
-const { AppError } = require("../errors");
-const validator = require("validator");
+const { AuthError } = require("../errors");
+
+function validateName(name) {
+  if (!name) {
+    throw AuthError.invalidUserName;
+  }
+}
+
+function validateMobileNumber(mobileNumber) {
+  const mobileNumberRegex = /^\d{10}$/;
+  if (!mobileNumber || !mobileNumberRegex.test(mobileNumber)) {
+    throw AuthError.invalidMobileNumber;
+  }
+}
+
+function validatePassword(password) {
+  const passwordMinLength = 8;
+  if (!password || password.length < passwordMinLength) {
+    throw AuthError.invalidPassword;
+  }
+}
 
 function validateRegister(req) {
-  const { name, email, password } = req.body;
-  if (!name) {
-    throw AppError.badRequest("Username cannot be empty.");
-  }
-  if (!email || validator.isEmail(email) == false) {
-    throw AppError.badRequest("Invalid email address.");
-  }
-  if (!password) {
-    throw AppError.badRequest("Password cannot be empty.");
-  }
-  if (validator.isStrongPassword(password, { minLength: 8 }) == false) {
-    throw AppError.badRequest("Password is not strong enough.");
-  }
+  const { name, mobileNumber, password } = req.body;
+  validateName(name);
+  validateMobileNumber(mobileNumber);
+  validatePassword(password);
 }
 
 function validateLogin(req) {
-  const { email } = req.body;
-  if (!email || validator.isEmail(email) == false) {
-    throw AppError.badRequest("Invalid email address.");
-  }
-}
-
-function validateEmail(email) {
-  if (!email || validator.isEmail(email) == false) {
-    throw AppError.badRequest("Invalid email address.");
-  }
+  const { mobileNumber } = req.body;
+  validateMobileNumber(mobileNumber);
 }
 
 module.exports = {
   validateRegister,
   validateLogin,
-  validateEmail,
+  validateMobileNumber,
 };
