@@ -8,11 +8,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  email: {
+  mobileNumber: {
     type: String,
     required: true,
     unique: true,
-    lowercase: true,
+  },
+  imageUrl: {
+    type: String,
+    default: null,
   },
   isVerified: {
     type: Boolean,
@@ -40,7 +43,8 @@ userSchema.methods.response = function () {
   return {
     id: this._id,
     name: this.name,
-    email: this.email,
+    mobileNumber: this.mobileNumber,
+    imageUrl: this.imageUrl,
   };
 };
 

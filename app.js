@@ -21,10 +21,12 @@ const authRouter = require("./routes/auth-route");
 const walletRouter = require("./routes/wallet-route");
 const transactionRouter = require("./routes/transaction-route");
 const paymentRouter = require("./routes/payment-route");
+const accountRouter = require("./routes/account-route");
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/wallet", walletRouter);
 app.use("/api/v1/transaction", transactionRouter);
 app.use("/api/v1/payment", paymentRouter);
+app.use("/api/v1/account", accountRouter);
 app.use("*", notFound);
 
 // database connection

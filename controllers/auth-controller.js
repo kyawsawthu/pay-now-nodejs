@@ -9,15 +9,15 @@ const authValidation = require("../validations/auth-validation");
 
 async function register(req, res) {
   try {
-    const { email } = req.body;
+    const { mobileNumber } = req.body;
     authValidation.validateRegister(req);
-    const existingUser = await userService.getUserByEmail(email);
+    const existingUser = await userService.getUserByMobileNumber(mobileNumber);
     if (existingUser) {
-      throw AuthError.emailAlreadyExists;
+      throw AuthError.mobileNumberAlreadyExists;
     }
     const newUser = await userService.createUser(req);
     await walletService.createWallet(newUser._id);
-    res.success(null, "", "Please verify you email.");
+    res.success(null, "", "Please verify your mobile number.");
   } catch (err) {
     res.fail(err);
   }
@@ -26,10 +26,10 @@ async function register(req, res) {
 async function login(req, res) {
   try {
     authValidation.validateLogin(req);
-    const { email, password } = req.body;
-    const user = await userService.getUserByEmail(email);
+    const { mobileNumber, password } = req.body;
+    const user = await userService.getUserByMobileNumber(mobileNumber);
     if (user.isVerified === false) {
-      throw AuthError.needEmailVerification;
+      throw AuthError.needMobileNumberVerification;
     }
     if (user) {
       const isPasswordCorrect = await user.comparePassword(password);
@@ -37,7 +37,7 @@ async function login(req, res) {
         throw AuthError.incorrectPassword;
       }
     } else {
-      throw AuthError.emailDoesNotExist;
+      throw AuthError.mobileNumberDoesNotExist;
     }
     const token = jwt.createToken({ userId: user._id });
     const response = { profile: user.response(), accessToken: token };
@@ -49,14 +49,14 @@ async function login(req, res) {
 }
 async function requestOTP(req, res) {
   try {
-    const { email, purpose } = req.body;
-    authValidation.validateEmail(email);
+    const { mobileNumber, purpose } = req.body;
+    authValidation.validateMobileNumber(mobileNumber);
     if (purpose === OTPPurpose.FORGOT_PASSWORD) {
-      const user = await userService.getUserByEmail(email);
+      const user = await userService.getUserByMobileNumber(mobileNumber);
       if (!user) {
-        throw AuthError.emailDoesNotExist;
+        throw AuthError.mobileNumberDoesNotExist;
       }
-      res.success(null, "", "OTP has been sent to your email.");
+      res.success(null, "", "OTP has been sent to your mobile number.");
     }
   } catch (err) {
     res.fail(err);
@@ -65,29 +65,29 @@ async function requestOTP(req, res) {
 
 async function verifyOTP(req, res) {
   try {
-    const { email, code, purpose } = req.body;
-    authValidation.validateEmail(email);
+    const { mobileNumber, code, purpose } = req.body;
+    authValidation.validateMobileNumber(mobileNumber);
     if (!code) {
       throw AuthError.incorrectOTP;
     }
     if (purpose === OTPPurpose.REGISTER) {
-      const user = await userService.getUserByEmail(email);
+      const user = await userService.getUserByMobileNumber(mobileNumber);
       if (user.isVerified === true) {
-        throw AppError.badRequest("Email already verified.");
+        throw AppError.badRequest("Mobile number already verified.");
       }
       const isCorrect = otpService.verify(code);
       if (isCorrect === false) {
         throw AuthError.incorrectOTP;
       }
       const token = jwt.createToken({ userId: user._id });
-      await userService.verifyUser(email);
+      await userService.verifyUser(mobileNumber);
       await tokenService.saveActiveToken(user._id, token);
       const response = { profile: user.response(), accessToken: token };
       res.success(response);
     } else if (purpose === OTPPurpose.FORGOT_PASSWORD) {
-      const user = await userService.getUserByEmail(email);
+      const user = await userService.getUserByMobileNumber(mobileNumber);
       if (!user) {
-        throw AuthError.emailDoesNotExist;
+        throw AuthError.mobileNumberDoesNotExist;
       }
       const isCorrect = otpService.verify(code);
       if (isCorrect === false) {
@@ -97,15 +97,6 @@ async function verifyOTP(req, res) {
     } else {
       throw AppError.badRequest("Invalid OTP purpose.");
     }
-  } catch (err) {
-    res.fail(err);
-  }
-}
-
-async function profile(req, res) {
-  try {
-    const user = await userService.getUserById(req.userId);
-    res.success(user.response());
   } catch (err) {
     res.fail(err);
   }
@@ -137,6 +128,5 @@ module.exports = {
   login,
   requestOTP,
   verifyOTP,
-  profile,
   logout,
 };

@@ -2,22 +2,26 @@ const mongoose = require("mongoose");
 const User = require("../models/user");
 
 async function createUser(req) {
-  const { name, email, password } = req.body;
-  const user = await User.create({ name, email, password });
+  const { name, mobileNumber, password } = req.body;
+  const user = await User.create({ name, mobileNumber, password });
   return user;
-}
-
-async function getUserByEmail(email) {
-  return await User.findOne({ email });
 }
 
 async function getUserById(userId) {
   return await User.findById(userId);
 }
 
-async function verifyUser(email) {
+async function getUserByMobileNumber(mobileNumber) {
+  return await User.findOne({ mobileNumber });
+}
+
+async function searchWithMobileNumber(searchText) {
+  return await User.find({ mobileNumber: { $regex: `^${searchText}` } });
+}
+
+async function verifyUser(mobileNumber) {
   return await User.findOneAndUpdate(
-    { email: email },
+    { mobileNumber: mobileNumber },
     { isVerified: true },
     { new: true }
   );
@@ -37,7 +41,8 @@ async function deletePaymentCard(userId, cardId) {
 
 module.exports = {
   getUserById,
-  getUserByEmail,
+  getUserByMobileNumber,
+  searchWithMobileNumber,
   createUser,
   verifyUser,
   addPaymentCard,
