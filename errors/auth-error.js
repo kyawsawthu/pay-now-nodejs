@@ -1,16 +1,16 @@
 const AppError = require("./app-error");
 const ErrorCode = require("./error-codes");
 
-const emailAlreadyExists = new AppError(
+const mobileNumberAlreadyExists = new AppError(
   200,
-  ErrorCode.emailAlreadyExists,
-  "This email is already registered. Please try a different email or log in."
+  ErrorCode.mobileNumberAlreadyExists,
+  "This mobile number is already registered. Please try a different mobile number or log in."
 );
 
-const emailDoesNotExist = new AppError(
+const mobileNumberDoesNotExist = new AppError(
   200,
-  ErrorCode.emailDoesNotExist,
-  "There is no account registered with this email."
+  ErrorCode.mobileNumberDoesNotExist,
+  "There is no account registered with this mobile number."
 );
 
 const incorrectPassword = new AppError(
@@ -25,10 +25,10 @@ const incorrectOTP = new AppError(
   "Incorrect OTP."
 );
 
-const needEmailVerification = new AppError(
+const needMobileNumberVerification = new AppError(
   200,
-  ErrorCode.needEmailVerification,
-  "Please verify your email."
+  ErrorCode.needMobileNumberVerification,
+  "Please verify your mobile number."
 );
 const unauthenticated = new AppError(401, "401", "Invalid access token.");
 const tokenExpired = new AppError(401, "401", "Token expired.");
@@ -40,11 +40,11 @@ const logoutFail = new AppError(
 );
 
 module.exports = {
-  emailAlreadyExists,
-  emailDoesNotExist,
+  mobileNumberAlreadyExists,
+  mobileNumberDoesNotExist,
   incorrectPassword,
   incorrectOTP,
-  needEmailVerification,
+  needMobileNumberVerification,
   unauthenticated,
   tokenExpired,
   logoutFail,
