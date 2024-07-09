@@ -1,22 +1,22 @@
-const { AppError } = require("../errors");
+const { AuthError } = require("../errors");
 
 function validateName(name) {
   if (!name) {
-    throw AppError.badRequest("Username cannot be empty.");
+    throw AuthError.invalidUserName;
   }
 }
 
 function validateMobileNumber(mobileNumber) {
   const mobileNumberRegex = /^\d{10}$/;
   if (!mobileNumber || !mobileNumberRegex.test(mobileNumber)) {
-    throw AppError.badRequest("Invalid mobile number.");
+    throw AuthError.invalidMobileNumber;
   }
 }
 
 function validatePassword(password) {
   const passwordMinLength = 8;
   if (!password || password.length < passwordMinLength) {
-    throw AppError.badRequest("Password must have at least 8 characters.");
+    throw AuthError.invalidPassword;
   }
 }
 

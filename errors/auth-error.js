@@ -30,6 +30,25 @@ const needMobileNumberVerification = new AppError(
   ErrorCode.needMobileNumberVerification,
   "Please verify your mobile number."
 );
+
+const invalidUserName = new AppError(
+  200,
+  ErrorCode.invalidUserName,
+  "Username cannot be empty."
+);
+
+const invalidMobileNumber = new AppError(
+  200,
+  ErrorCode.invalidMobileNumber,
+  "Mobile number must have at least 10 digits."
+);
+
+const invalidPassword = new AppError(
+  200,
+  ErrorCode.invalidPassword,
+  "Password must have at least 8 characters."
+);
+
 const unauthenticated = new AppError(401, "401", "Invalid access token.");
 const tokenExpired = new AppError(401, "401", "Token expired.");
 
@@ -45,6 +64,9 @@ module.exports = {
   incorrectPassword,
   incorrectOTP,
   needMobileNumberVerification,
+  invalidUserName,
+  invalidMobileNumber,
+  invalidPassword,
   unauthenticated,
   tokenExpired,
   logoutFail,
