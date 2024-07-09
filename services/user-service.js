@@ -15,6 +15,10 @@ async function getUserByMobileNumber(mobileNumber) {
   return await User.findOne({ mobileNumber });
 }
 
+async function searchWithMobileNumber(searchText) {
+  return await User.find({ mobileNumber: { $regex: `^${searchText}` } });
+}
+
 async function verifyUser(mobileNumber) {
   return await User.findOneAndUpdate(
     { mobileNumber: mobileNumber },
@@ -38,6 +42,7 @@ async function deletePaymentCard(userId, cardId) {
 module.exports = {
   getUserById,
   getUserByMobileNumber,
+  searchWithMobileNumber,
   createUser,
   verifyUser,
   addPaymentCard,
