@@ -22,7 +22,9 @@ async function getRequestsAsSender(userId) {
   return await Transaction.find({
     sender: userId,
     status: { $ne: TransactionStatus.DONE },
-  }).sort({ date: -1 });
+  })
+    .populate("receiver")
+    .sort({ date: -1 });
 }
 
 // transactions with status != done as a receiver
@@ -30,7 +32,9 @@ async function getRequestsAsReceiver(userId) {
   return await Transaction.find({
     receiver: userId,
     status: { $ne: TransactionStatus.DONE },
-  }).sort({ date: -1 });
+  })
+    .populate("sender")
+    .sort({ date: -1 });
 }
 
 async function transfer(sender, receiver, amount, note) {

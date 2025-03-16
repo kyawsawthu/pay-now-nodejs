@@ -6,7 +6,7 @@ const app = express();
 
 // swagger
 const swaggerUI = require("swagger-ui-express");
-const swaggerSpecs = require("./config/swagger");
+const swaggerSpecs = require("./swagger/config/swagger");
 
 const helmet = require("helmet");
 app.use(express.json());
