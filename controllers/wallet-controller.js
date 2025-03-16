@@ -1,7 +1,7 @@
 const { TransactionStatus } = require("../constants");
 const userService = require("../services/user-service");
 const walletService = require("../services/wallet-service");
-const paymentService = require("../services/payment-service");
+const paymentService = require("../services/payment-card-service");
 const transactionService = require("../services/transaction-service");
 const transactionValidation = require("../validations/transaction-validation");
 const { WalletError, AppError } = require("../errors");

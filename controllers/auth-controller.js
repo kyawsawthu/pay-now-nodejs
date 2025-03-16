@@ -111,15 +111,25 @@ async function logout(req, res) {
       throw AuthError.logoutFail;
     }
 
-    const payload = jwt.verifyToken(token);
-    const userId = payload.userId;
-    const isActive = await tokenService.verifyToken(userId, token);
+    try {
+      const payload = jwt.verifyToken(token);
+      const userId = payload.userId;
+      const isActive = await tokenService.verifyToken(userId, token);
 
-    if (isActive === false) {
-      throw AuthError.logoutFail;
+      if (isActive === false) {
+        throw AuthError.logoutFail;
+      }
+      await tokenService.saveInactiveToken(token);
+      res.success();
+    } catch (jwtError) {
+      if (jwtError.name === "TokenExpiredError") {
+        // Token is expired but we still want to mark it as inactive
+        await tokenService.saveInactiveToken(token);
+        res.success();
+      } else {
+        throw AuthError.logoutFail;
+      }
     }
-    await tokenService.saveInactiveToken(token);
-    res.success();
   } catch (err) {
     res.fail(err);
   }

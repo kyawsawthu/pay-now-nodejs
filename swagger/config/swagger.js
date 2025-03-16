@@ -41,7 +41,7 @@ const options = {
       { name: "auth" },
       { name: "account" },
       { name: "wallet" },
-      { name: "payment" },
+      { name: "payment-card" },
       { name: "transaction" },
     ],
   },
