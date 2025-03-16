@@ -30,8 +30,12 @@ async function saveActiveToken(userId, token) {
 }
 
 async function saveInactiveToken(token) {
-  await Whitelist.findOneAndUpdate({ token: token }, { token: "" });
-  await Blacklist.create({ token });
+  try {
+    await Whitelist.findOneAndUpdate({ token: token }, { token: "" });
+    await Blacklist.create({ token });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 module.exports = {

@@ -13,13 +13,13 @@ function response(code, message, data) {
     };
   } else if (arguments.length === 2) {
     return {
-      code: code,
+      code: code.toString(),
       message: message,
       data: null,
     };
   } else if (arguments.length == 3) {
     return {
-      code: code,
+      code: code.toString(),
       message: message,
       data: data,
     };

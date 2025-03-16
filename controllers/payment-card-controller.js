@@ -1,6 +1,6 @@
 const { PaymentError, AppError } = require("../errors");
 const userService = require("../services/user-service");
-const paymentService = require("../services/payment-service");
+const paymentService = require("../services/payment-card-service");
 const paymentValidation = require("../validations/payment-validation");
 
 async function cards(req, res) {

@@ -1,14 +1,14 @@
 /**
  * @swagger
  * tags:
- *   name: payment
+ *   name: payment-card
  */
 
 /**
  * @swagger
- * /payment/cards:
+ * /payment-card/cards:
  *   get:
- *     tags: [payment]
+ *     tags: [payment-card]
  *     security:
  *       - bearerAuth: []
  *     responses:
@@ -29,9 +29,9 @@
 
 /**
  * @swagger
- * /payment/add-card:
+ * /payment-card/add-card:
  *   post:
- *     tags: [payment]
+ *     tags: [payment-card]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -58,9 +58,9 @@
 
 /**
  * @swagger
- * /payment/update-card:
+ * /payment-card/update-card:
  *   post:
- *     tags: [payment]
+ *     tags: [payment-card]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
@@ -92,9 +92,9 @@
 
 /**
  * @swagger
- * /payment/delete-card:
+ * /payment-card/delete-card:
  *   post:
- *     tags: [payment]
+ *     tags: [payment-card]
  *     security:
  *       - bearerAuth: []
  *     requestBody:
