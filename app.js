@@ -31,12 +31,12 @@ app.use(responseHandler);
 const authRouter = require("./routes/auth-route");
 const walletRouter = require("./routes/wallet-route");
 const transactionRouter = require("./routes/transaction-route");
-const paymentRouter = require("./routes/payment-route");
+const paymentRouter = require("./routes/payment-card-route");
 const accountRouter = require("./routes/account-route");
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/wallet", walletRouter);
 app.use("/api/v1/transaction", transactionRouter);
-app.use("/api/v1/payment", paymentRouter);
+app.use("/api/v1/payment-card", paymentRouter);
 app.use("/api/v1/account", accountRouter);
 app.use("*", notFound);
 
@@ -46,6 +46,7 @@ const host = require("./utils/host");
 const port = process.env.PORT;
 const url = process.env.MONGO_URL;
 
+/*
 function start() {
   try {
     database.connect(url);
@@ -55,6 +56,29 @@ function start() {
     server.timeout = 5000;
   } catch (err) {
     console.log(err);
+  }
+}
+  */
+
+async function start() {
+  try {
+    await database.connect(url);
+    const server = app.listen(port, () => {
+      console.log(`Server is listening on http://${host}:${port}`);
+    });
+    server.timeout = 5000;
+
+    // Graceful shutdown
+    process.on("SIGTERM", async () => {
+      console.log("SIGTERM received. Starting graceful shutdown");
+      server.close(async () => {
+        await database.disconnect();
+        process.exit(0);
+      });
+    });
+  } catch (err) {
+    console.error("Server startup error:", err);
+    process.exit(1);
   }
 }
 
