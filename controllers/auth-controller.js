@@ -28,10 +28,11 @@ async function login(req, res) {
     authValidation.validateLogin(req);
     const { mobileNumber, password } = req.body;
     const user = await userService.getUserByMobileNumber(mobileNumber);
-    if (user.isVerified === false) {
-      throw AuthError.needMobileNumberVerification;
-    }
+
     if (user) {
+      if (user.isVerified === false) {
+        throw AuthError.needMobileNumberVerification;
+      }
       const isPasswordCorrect = await user.comparePassword(password);
       if (isPasswordCorrect === false) {
         throw AuthError.incorrectPassword;
