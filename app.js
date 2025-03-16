@@ -3,8 +3,10 @@ require("dotenv").config();
 // app
 const express = require("express");
 const app = express();
+
+// swagger
 const swaggerUI = require("swagger-ui-express");
-const swaggerSpecs = require("./config/swagger");
+const swaggerSpecs = require("./swagger/config/swagger");
 
 const helmet = require("helmet");
 app.use(express.json());
@@ -14,15 +16,7 @@ app.use(helmet());
 app.use(
   "/api-docs",
   swaggerUI.serve,
-  swaggerUI.setup(swaggerSpecs, {
-    explorer: true,
-    customCss: ".swagger-ui .topbar { display: none }",
-    swaggerOptions: {
-      docExpansion: "none",
-      filter: true,
-      showRequestDuration: true,
-    },
-  })
+  swaggerUI.setup(swaggerSpecs, { explorer: true })
 );
 
 // middlewares
