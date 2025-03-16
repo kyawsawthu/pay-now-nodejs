@@ -3,10 +3,27 @@ require("dotenv").config();
 // app
 const express = require("express");
 const app = express();
+const swaggerUI = require("swagger-ui-express");
+const swaggerSpecs = require("./config/swagger");
 
 const helmet = require("helmet");
 app.use(express.json());
 app.use(helmet());
+
+// swagger docs
+app.use(
+  "/api-docs",
+  swaggerUI.serve,
+  swaggerUI.setup(swaggerSpecs, {
+    explorer: true,
+    customCss: ".swagger-ui .topbar { display: none }",
+    swaggerOptions: {
+      docExpansion: "none",
+      filter: true,
+      showRequestDuration: true,
+    },
+  })
+);
 
 // middlewares
 const delay = require("./middlewares/delay");
