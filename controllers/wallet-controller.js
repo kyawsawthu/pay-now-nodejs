@@ -54,8 +54,8 @@ async function transfer(req, res) {
 
 async function request(req, res) {
   try {
-    transactionValidation.validate(req);
     const { userId, amount, note } = req.body;
+    transactionValidation.validateAmount(amount);
     const currentUserId = req.userId;
     if (currentUserId === userId) {
       throw WalletError.transactionFailed;

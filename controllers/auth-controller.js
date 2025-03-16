@@ -48,6 +48,7 @@ async function login(req, res) {
     res.fail(err);
   }
 }
+
 async function requestOTP(req, res) {
   try {
     const { mobileNumber, purpose } = req.body;
